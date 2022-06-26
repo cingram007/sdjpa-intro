@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //DataJpaTest will only load the JPA context, so its much lighter to load
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) //TestMethodOrder new for JUnit 5
+@ComponentScan(basePackages = {"guru.springframework.sdjpaintro.bootstrap"}) //adding the ComponentScan will add all the files in the package
 public class SpringBootTestJPATestSlice {
 
     @Autowired
@@ -29,8 +31,8 @@ public class SpringBootTestJPATestSlice {
     @Test
     void testJpaTestSplice(){
         long countBefore = bookRepository.count();
-        //this will fail because now that we're using the @DataJpaTest slice we don't get the initializer context
-        assertThat(countBefore).isEqualTo(0);
+        //this will fail because now that we're using the @DataJpaTest slice we don't get the DataInitializer context
+        assertThat(countBefore).isEqualTo(3);
 
         bookRepository.save(new Book("My Book", "1234567", "Self"));
         long countAfter = bookRepository.count();
@@ -43,6 +45,6 @@ public class SpringBootTestJPATestSlice {
         long countBefore = bookRepository.count();
         //In the Spring default state this will fail because now that we're using the @DataJpaTest slice we don't get the initializer context
         //however because we committed the data from the first test. Usally each test should clean up its own data
-        assertThat(countBefore).isEqualTo(1);
+        assertThat(countBefore).isEqualTo(4);
     }
 }
