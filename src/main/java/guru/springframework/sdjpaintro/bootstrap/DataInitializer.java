@@ -5,8 +5,10 @@ import guru.springframework.sdjpaintro.repositories.BookRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.boot.CommandLineRunner;
 
+//tis is huge. What makes a class a Spring Component is the @Component tag
+// plus it must implement the CommandLineRunner Interface
 @Component
-public class DataInitializer implements CommandLineRunner {
+public class DataInitializer implements CommandLineRunner{
 
     private final BookRepository bookRepository;
 
@@ -24,6 +26,9 @@ public class DataInitializer implements CommandLineRunner {
 
         Book bookSIA = new Book("Spring in Action", "234234", "OReilly");
         Book savedSIA = bookRepository.save(bookSIA);
+
+        Book bookMIA = new Book("Struts in Action", "567567", "O'Reilly");
+        Book savedMIA = bookRepository.save(bookMIA);
 
         bookRepository.findAll().forEach(book -> {
              System.out.println("Id: " + book.getId());
