@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Commit;
@@ -14,11 +15,13 @@ import org.springframework.test.annotation.Rollback;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//20220704: So far this test is configured ot run against the inmem database
 //SpringBootTest is good but it brings up hte entire context
 //DataJpaTest will only load the JPA context, so its much lighter to load
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) //TestMethodOrder new for JUnit 5
 @ComponentScan(basePackages = {"guru.springframework.sdjpaintro.bootstrap"}) //adding the ComponentScan will add all the files in the package
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) //Says do not replace what we have configured
 public class SpringBootTestJPATestSlice {
 
     @Autowired
@@ -45,6 +48,6 @@ public class SpringBootTestJPATestSlice {
         long countBefore = bookRepository.count();
         //In the Spring default state this will fail because now that we're using the @DataJpaTest slice we don't get the initializer context
         //however because we committed the data from the first test. Usally each test should clean up its own data
-        assertThat(countBefore).isEqualTo(4);
+        assertThat(countBefore).isEqualTo(3);
     }
 }
