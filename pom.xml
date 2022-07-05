@@ -15,6 +15,7 @@
     <description>Introduction to Spring Data JPA</description>
     <properties>
         <java.version>11</java.version>
+        <org.springframework.version>2.7.1</org.springframework.version>
     </properties>
     <dependencies>
         <dependency>
@@ -26,6 +27,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--h2  dependancy only included in test runtime-->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -38,6 +40,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>${org.springframework.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
@@ -48,12 +51,25 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <!-- Use a profile to include dependancies at any runtime-->
+    <profiles>
+        <profile>
+            <id>h2</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${org.springframework.version}</version>
             </plugin>
         </plugins>
     </build>
